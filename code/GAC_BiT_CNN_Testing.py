@@ -2,14 +2,14 @@
 =============================================================================
 GAC-BiT-CNN: Independent Test Set Evaluation
 =============================================================================
-Paper: Explainable Deep Representation Learning for Methyltransferase Identification via Bidirectional Transformers and Adversarial Capsule Networks
 
-Authors: Muhammad Muazzam, Farman Ali, Muhammad Asif
-         Department of Computer Science, Bahria University Islamabad, Pakistan
 
 Description:
     Loads a saved GAC-BiT-CNN model and evaluates it on the independent
-    test set. Reports Accuracy, Sensitivity, Specificity, Precision,
+    test set. Works for both the test set (1,144 sequences) and the
+    independent set (600 sequences); the input CSV contains the 2048-dim
+    fused features (ProtT5-BFD + ProtT5-XL) with the label in the last
+    column. Reports Accuracy, Sensitivity, Specificity, Precision,
     F1-score, AUC, and MCC. Generates ROC curve plot.
 
 Usage:
@@ -54,6 +54,8 @@ class CapsuleLayer(tf.keras.layers.Layer):
     """
     Capsule Layer with dynamic routing-by-agreement.
     Must be provided as a custom object when loading the saved model.
+    The Gaussian noise used during training is not added here, so test
+    predictions are deterministic.
     """
 
     def __init__(self, num_capsules=4, dim_capsule=8, routing_iters=3, **kwargs):
@@ -128,8 +130,9 @@ def load_test_data(file_path):
     y = data.iloc[:, -1].values
 
     print(f"  Samples: {X.shape[0]}   Features: {X.shape[1]}")
-    print(f"  Class distribution: PMT={int(y.sum())}, non-PMT={int((y==0).sum())}")
+    print(f"  Class distribution: MT={int(y.sum())}, non-MT={int((y==0).sum())}")
 
+    # Features are standardised with a StandardScaler fitted on this file
     scaler = StandardScaler()
     X = scaler.fit_transform(X)
     X = X.reshape((X.shape[0], X.shape[1], 1))
