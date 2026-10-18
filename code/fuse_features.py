@@ -2,10 +2,7 @@
 =============================================================================
 GAC-BiT-CNN: Fuse Multiple Protein Embedding CSVs into One Feature Set
 =============================================================================
-Paper: Explainable Deep Representation Learning for Methyltransferase Identification via Bidirectional Transformers and Adversarial Capsule Networks
 
-Authors: Muhammad Muazzam, Farman Ali, Muhammad Asif
-         Department of Computer Science, Bahria University Islamabad, Pakistan
 
 Description:
     Concatenates ProtGen, ESM-2, ProtT5-BFD, and ProtT5-XL-UniRef50
